@@ -2,41 +2,41 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_forecast/common/constants/enums.dart';
-import 'package:weather_forecast/common/mobx/flutter_mobx.dart';
 import 'package:weather_forecast/common/stores/weather/weather_store.dart';
 
 class MainMenuWidget extends StatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
 
-  const MainMenuWidget({Key key, this.scaffoldKey}) : super(key: key);
+  const MainMenuWidget({Key? key, required this.scaffoldKey}) : super(key: key);
 
   @override
   _MainMenuWidgetState createState() => _MainMenuWidgetState();
 }
 
 class _MainMenuWidgetState extends State<MainMenuWidget> {
-  Completer<GoogleMapController> _controller = Completer();
+  final Completer<GoogleMapController> _controller = Completer();
 
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
 
-  MarkerId selectedMarker;
-  Marker marker;
+  late MarkerId selectedMarker;
+  late Marker marker;
 
   var mapType;
 
   //Mobx store for weather
-  WeatherStore _weatherStore;
+  late WeatherStore _weatherStore;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    final String markerIdVal = '';
-    final MarkerId markerId = MarkerId(markerIdVal);
+    final markerIdVal = '';
+    final markerId = MarkerId(markerIdVal);
 
     markers.clear();
     marker = Marker(
@@ -63,21 +63,21 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
       child: Drawer(
         child: Observer(builder: (context) {
           if (_weatherStore.state == StoreState.data_received) {
-            String markerIdVal = '';
-            MarkerId markerId = MarkerId(markerIdVal);
+            var markerIdVal = '';
+            var markerId = MarkerId(markerIdVal);
             markers.clear();
             marker = Marker(
               markerId: markerId,
-              position: LatLng(_weatherStore.response.coord.lat,
-                  _weatherStore.response.coord.lon),
+              position: LatLng(_weatherStore.response!.coord!.lat,
+                  _weatherStore.response!.coord!.lon),
               infoWindow: InfoWindow(title: markerIdVal, snippet: ''),
               onTap: () {},
             );
             markers[markerId] = marker;
 
-            CameraPosition _kGooglePlex = CameraPosition(
-              target: LatLng(_weatherStore.response.coord.lat,
-                  _weatherStore.response.coord.lon),
+            var _kGooglePlex = CameraPosition(
+              target: LatLng(_weatherStore.response!.coord!.lat,
+                  _weatherStore.response!.coord!.lon),
               zoom: 7,
             );
             return Scaffold(
@@ -93,7 +93,7 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
                 foregroundColor: Colors.white,
                 backgroundColor: Colors.deepOrangeAccent,
                 onPressed: () {
-                  widget.scaffoldKey.currentState.openEndDrawer();
+                  widget.scaffoldKey.currentState!.openEndDrawer();
                 },
                 child: Icon(Icons.arrow_forward_ios),
               ),
@@ -108,7 +108,7 @@ class _MainMenuWidgetState extends State<MainMenuWidget> {
               foregroundColor: Colors.white,
               backgroundColor: Colors.deepOrangeAccent,
               onPressed: () {
-                widget.scaffoldKey.currentState.openEndDrawer();
+                widget.scaffoldKey.currentState!.openEndDrawer();
               },
               child: Icon(Icons.arrow_forward_ios),
             ),

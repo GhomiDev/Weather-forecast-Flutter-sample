@@ -28,11 +28,11 @@ mixin _$NavigationStore on _NavigationStore, Store {
       ActionController(name: '_NavigationStore');
 
   @override
-  void navigateToRoute(String route) {
+  void navigateToRoute(BuildContext context, String route) {
     final _$actionInfo = _$_NavigationStoreActionController.startAction(
         name: '_NavigationStore.navigateToRoute');
     try {
-      return super.navigateToRoute(route);
+      return super.navigateToRoute(context, route);
     } finally {
       _$_NavigationStoreActionController.endAction(_$actionInfo);
     }

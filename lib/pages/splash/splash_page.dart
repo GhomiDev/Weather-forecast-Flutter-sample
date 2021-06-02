@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:weather_forecast/common/configs/routes.dart';
 import 'dart:math' as math;
 
 import 'package:weather_forecast/common/stores/navigation/navigation_store.dart';
@@ -15,18 +14,24 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends State<SplashPage>
     with SingleTickerProviderStateMixin {
-  AnimationController _animationController;
-  Timer timer;
+  late AnimationController _animationController;
+  late Timer timer;
 
-  NavigationStore _navigationStore;
+  late NavigationStore _navigationStore;
 
-  startTime() async {
-    timer = new Timer(Duration(seconds: 5), navigationPage);
+  void startTime() async {
+    timer = Timer(Duration(seconds: 5), navigationPage);
   }
 
   void navigationPage() {
     timer.cancel();
-    _navigationStore.navigateToRoute(Routes.home);
+
+    _navigationStore.navigateToRoute(context, 'home');
+
+    // context
+    //   ..read<NavigationBloc>().add(NavigateToHomeEvent())
+    //   ..beamToNamed('/home');
+
   }
 
   @override
@@ -78,14 +83,13 @@ class _SplashPageState extends State<SplashPage>
                   (index) {
                     return AnimatedBuilder(
                       animation: _animationController,
-                      child: LinearText(),
                       builder: (context, child) {
                         final animationRotationValue =
                             _animationController.value *
                                 2 *
                                 math.pi /
                                 numberOfTexts;
-                        double rotation = 2 * math.pi * index / numberOfTexts +
+                        var rotation = 2 * math.pi * index / numberOfTexts +
                             math.pi / 2 +
                             animationRotationValue;
                         if (isOnLeft(rotation)) {
@@ -102,6 +106,7 @@ class _SplashPageState extends State<SplashPage>
                           child: LinearText(),
                         );
                       },
+                      child: LinearText(),
                     );
                   },
                 ),
@@ -115,18 +120,13 @@ class _SplashPageState extends State<SplashPage>
 }
 
 class LinearText extends StatelessWidget {
+  final random = Random();
+
   @override
   Widget build(BuildContext context) {
     return RotatedBox(
       quarterTurns: 3,
       child: Container(
-        child: Text(
-          'Weather',
-          style: TextStyle(
-            color: getRandomColor(0.4),
-            fontSize: 150,
-          ),
-        ),
         foregroundDecoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
@@ -139,11 +139,16 @@ class LinearText extends StatelessWidget {
             stops: [0.0, 0.9, 0.8],
           ),
         ),
+        child: Text(
+          'Weather',
+          style: TextStyle(
+            color: getRandomColor(0.4),
+            fontSize: 150,
+          ),
+        ),
       ),
     );
   }
-
-  var random = new Random();
 
   Color getRandomColor(double opacityParam) {
     switch (random.nextInt(4)) {

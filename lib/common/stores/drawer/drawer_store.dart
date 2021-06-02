@@ -8,11 +8,11 @@ class DrawerStore extends _DrawerStore with _$DrawerStore {}
 
 abstract class _DrawerStore with Store {
   @observable
-  DrawerStoreState drawerStoreState;
+  late DrawerStoreState drawerStoreState;
 
   @action
   void setMapCoordinates(double latitude, double longitude){
-    drawerStoreState = new NewLocationOnMapState(
+    drawerStoreState = NewLocationOnMapState(
         latitude: latitude, longitude: longitude);
   }
 }

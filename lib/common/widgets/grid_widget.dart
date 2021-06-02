@@ -4,75 +4,78 @@ import 'package:weather_forecast/common/models/weather/weather_response_model.da
 import 'package:weather_forecast/common/widgets/weather_tile.dart';
 
 class GridWidget extends StatelessWidget {
-  final WeatherResponseModel weatherResponseModel;
+  final WeatherResponseModel? weatherResponseModel;
 
-  GridWidget({this.weatherResponseModel});
+  GridWidget({required this.weatherResponseModel});
 
   @override
   Widget build(BuildContext context) {
-    Size screenSize = MediaQuery.of(context).size;
-    List<StaggeredTile> _staggeredTiles = const <StaggeredTile>[
-      const StaggeredTile.count(2, 2),
-      const StaggeredTile.count(2, 1.3),
-      const StaggeredTile.count(2, 1.3),
-      const StaggeredTile.count(2, 2),
-      const StaggeredTile.count(2, 2),
-      const StaggeredTile.count(2, 2),
-      const StaggeredTile.count(2, 1.4),
+    if(weatherResponseModel==null){
+      return SizedBox.shrink();
+    }
+    var screenSize = MediaQuery.of(context).size;
+    var _staggeredTiles = const <StaggeredTile>[
+      StaggeredTile.count(2, 2),
+      StaggeredTile.count(2, 1.3),
+      StaggeredTile.count(2, 1.3),
+      StaggeredTile.count(2, 2),
+      StaggeredTile.count(2, 2),
+      StaggeredTile.count(2, 2),
+      StaggeredTile.count(2, 1.4),
     ];
 
-    List<Widget> _tiles = <Widget>[
-      new WeatherTile(
+    var _tiles = <Widget>[
+      WeatherTile(
         foregroundColor: Colors.white,
         backgroundColor: Colors.green,
         iconData: Icons.whatshot,
         title: 'Temperature',
         description:
-            '${weatherResponseModel.main.temp}°C in ${weatherResponseModel.name}',
+            '${weatherResponseModel!.main!.temp}°C in ${weatherResponseModel!.name}',
       ),
-      new WeatherTile(
+      WeatherTile(
         foregroundColor: Colors.white,
         backgroundColor: Colors.lightBlue,
         iconData: Icons.where_to_vote,
         title: 'Country',
-        description: '${weatherResponseModel.sys.country}',
+        description: '${weatherResponseModel!.sys!.country}',
       ),
-      new WeatherTile(
+      WeatherTile(
         foregroundColor: Colors.white,
         backgroundColor: Colors.amber,
         iconData: Icons.panorama_wide_angle,
         title: 'Humidity',
-        description: '${weatherResponseModel.main.humidity}%',
+        description: '${weatherResponseModel!.main!.humidity}%',
       ),
-      new WeatherTile(
+      WeatherTile(
         foregroundColor: Colors.white,
         backgroundColor: Colors.brown,
         iconData: Icons.speed,
         title: 'Wind',
         description:
-            'Speed ${weatherResponseModel.wind.speed} meter/sec \n degree: ${weatherResponseModel.wind.deg} degree',
+            'Speed ${weatherResponseModel!.wind!.speed} meter/sec \n degree: ${weatherResponseModel!.wind!.deg} degree',
       ),
-      new WeatherTile(
+      WeatherTile(
         foregroundColor: Colors.white,
         backgroundColor: Colors.deepOrange,
         iconData: Icons.branding_watermark_outlined,
         title: 'Temperature range',
         description:
-            '${weatherResponseModel.main.temp_min}°C\n${weatherResponseModel.main.temp_max}°C',
+            '${weatherResponseModel!.main!.temp_min}°C\n${weatherResponseModel!.main!.temp_max}°C',
       ),
-      new WeatherTile(
+      WeatherTile(
         foregroundColor: Colors.white,
         backgroundColor: Colors.pink,
         iconData: Icons.cloud,
         title: 'Cloudiness',
-        description: '${weatherResponseModel.clouds.all}%',
+        description: '${weatherResponseModel!.clouds!.all}%',
       ),
-      new WeatherTile(
+      WeatherTile(
         foregroundColor: Colors.white,
         backgroundColor: Colors.indigo,
         iconData: Icons.present_to_all_sharp,
         title: 'Pressure',
-        description: '${weatherResponseModel.main.pressure} hPa',
+        description: '${weatherResponseModel!.main!.pressure} hPa',
       ),
     ];
 
@@ -84,10 +87,10 @@ class GridWidget extends StatelessWidget {
           child: StaggeredGridView.count(
             crossAxisCount: 4,
             staggeredTiles: _staggeredTiles,
-            children: _tiles,
             mainAxisSpacing: 4.0,
             crossAxisSpacing: 4.0,
             padding: const EdgeInsets.all(4.0),
+            children: _tiles,
           )),
     );
   }
